@@ -131,8 +131,7 @@ ${scheduleText || '(まだスケジュールがありません)'}
               { role: 'user', parts: [{ text: message }] }
             ],
             config: {
-              temperature: 0.7,
-              thinkingConfig: { thinkingBudget: 0 }
+              temperature: 0.7
             }
           });
 

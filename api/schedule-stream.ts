@@ -98,8 +98,7 @@ export default async function handler(req: Request) {
             model: MODEL_NAME,
             contents: prompt,
             config: {
-              temperature: 0.1,
-              thinkingConfig: { thinkingBudget: 0 }
+              temperature: 0.1
             }
           });
 
