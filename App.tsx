@@ -185,8 +185,17 @@ const App: React.FC = () => {
       setProjects(prev => [...prev, ...newProjects]);
       setIsLoadingGen(false);
       // Switch to calendar to prompt next step
-      setActiveTab('calendar'); 
+      setActiveTab('calendar');
     }, 800);
+  };
+
+  // 案件追加ハンドラ
+  const handleAddProject = (projectData: Omit<Project, 'id'>) => {
+    const newProject: Project = {
+      ...projectData,
+      id: `p_new_${Date.now()}`
+    };
+    setProjects(prev => [...prev, newProject]);
   };
 
   // Scene 2: AI Auto Assign with Load Balancing & Team Formation
@@ -449,10 +458,48 @@ const App: React.FC = () => {
       }
 
       if (act.action === 'swap_staff' && act.projectId) {
-        const removeStaff = staffList.find(s => s.name.includes((act as any).removeStaffName || ''));
-        const addStaff = staffList.find(s => s.name.includes((act as any).addStaffName || ''));
+        const removeStaffName = (act as any).removeStaffName || '';
+        const addStaffName = (act as any).addStaffName || '';
 
-        if (removeStaff && addStaff) {
+        // スタッフ名で検索（部分一致）
+        const removeStaff = staffList.find(s =>
+          s.name === removeStaffName || s.name.includes(removeStaffName) || removeStaffName.includes(s.name)
+        );
+        const addStaff = staffList.find(s =>
+          s.name === addStaffName || s.name.includes(addStaffName) || addStaffName.includes(s.name)
+        );
+
+        // 該当スケジュールが存在するか確認
+        const targetSchedule = schedules.find(s => s.project_id === act.projectId);
+
+        console.log('[handleChatAction] swap_staff:', {
+          projectId: act.projectId,
+          removeStaffName,
+          addStaffName,
+          removeStaff: removeStaff?.name,
+          addStaff: addStaff?.name,
+          targetSchedule: targetSchedule?.project_id
+        });
+
+        if (!targetSchedule) {
+          setValidationResult({
+            valid: false,
+            severity: 'error',
+            message: `プロジェクト ${act.projectId} のスケジュールが見つかりません`
+          });
+        } else if (!removeStaff) {
+          setValidationResult({
+            valid: false,
+            severity: 'error',
+            message: `スタッフ「${removeStaffName}」が見つかりません`
+          });
+        } else if (!addStaff) {
+          setValidationResult({
+            valid: false,
+            severity: 'error',
+            message: `スタッフ「${addStaffName}」が見つかりません`
+          });
+        } else {
           setSchedules(prev => prev.map(s => {
             if (s.project_id === act.projectId) {
               const newStaffIds = s.staff_ids.filter(id => id !== removeStaff.id);
@@ -466,7 +513,7 @@ const App: React.FC = () => {
           setValidationResult({
             valid: true,
             severity: 'info',
-            message: `${(act as any).removeStaffName} → ${(act as any).addStaffName} に変更しました`
+            message: `${removeStaffName} → ${addStaffName} に変更しました`
           });
         }
       }
@@ -656,7 +703,7 @@ const App: React.FC = () => {
           <div className="bg-indigo-600 p-1.5 rounded-lg">
             <Bot className="w-5 h-5 text-white" />
           </div>
-          <h1 className="text-xl font-bold text-gray-800 tracking-tight">Kensetsu<span className="text-indigo-600">AI</span> Manager</h1>
+          <h1 className="text-xl font-bold text-gray-800 tracking-tight">案件<span className="text-indigo-600">AI</span>マネージャー</h1>
           <span className="ml-2 px-2 py-0.5 rounded bg-gray-100 text-gray-500 text-xs font-mono border border-gray-200">POC v0.3 Multi-Assign</span>
         </div>
 
@@ -696,28 +743,15 @@ const App: React.FC = () => {
          <div className="max-w-full mx-auto h-full"> {/* Expanded width for timeline */}
             {activeTab === 'dashboard' ? (
                 <div className="h-full flex flex-col">
-                    <div className="mb-4 flex justify-between items-end">
+                    <div className="mb-4">
                        <p className="text-sm text-gray-500">
                           {projects.length} 件のプロジェクト ({projects.filter(p => p.status === 'Draft').length} 件が未定)
                        </p>
-                       <button
-                          onClick={handleGenerateNextMonth}
-                          disabled={isLoadingGen}
-                          className={`flex items-center gap-2 px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white text-sm font-medium rounded-md shadow-sm transition-all ${isLoadingGen ? 'opacity-50 cursor-not-allowed' : ''}`}
-                        >
-                          {isLoadingGen ? (
-                            <span className="animate-spin mr-2">⟳</span>
-                          ) : (
-                            <Zap className="w-4 h-4" />
-                          )}
-                          緊急案件取り込み
-                        </button>
                     </div>
-                    <DashboardView 
-                        projects={projects} 
+                    <DashboardView
+                        projects={projects}
                         facilities={facilities}
-                        onGenerateNextMonth={handleGenerateNextMonth}
-                        isLoading={isLoadingGen}
+                        onAddProject={handleAddProject}
                     />
                 </div>
             ) : (

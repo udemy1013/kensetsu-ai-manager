@@ -1,5 +1,5 @@
 {
-  "name": "Kensetsu AI Manager",
+  "name": "案件AIマネージャー",
   "description": "AI搭載型の建設工事管理POC。Excel管理をインテリジェントなビューに置き換え、Geminiを活用してスケジュールの最適化、制約チェック、施設データの分析を行います。",
   "requestFramePermissions": []
 }

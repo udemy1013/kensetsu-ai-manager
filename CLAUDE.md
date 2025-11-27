@@ -4,7 +4,7 @@
 
 ## プロジェクト概要
 
-KensetsuAI Managerは、ReactとViteで構築された建設プロジェクトスケジューリングアプリケーションです。Google Gemini AI（`@google/genai`経由）を使用して、施設の制約、スタッフの資格、作業負荷のバランスに基づいてインテリジェントに工事をスケジューリングします。
+案件AIマネージャーは、ReactとViteで構築された建設プロジェクトスケジューリングアプリケーションです。Google Gemini AI（`@google/genai`経由）を使用して、施設の制約、スタッフの資格、作業負荷のバランスに基づいてインテリジェントに工事をスケジューリングします。
 
 ## 開発コマンド
 
@@ -32,7 +32,7 @@ Vercelダッシュボードで`GEMINI_API_KEY`環境変数を設定してくだ�
 - React 19 + TypeScript
 - Vite 6（バンドラー）
 - Vercel Serverless Functions（APIルート）
-- Google Gemini AI（`gemini-2.5-flash`モデル）
+- Google Gemini AI（`gemini-3-pro-preview`モデル）
 - Tailwind CSS（index.htmlでCDN経由）
 - lucide-react（アイコン）
 

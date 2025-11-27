@@ -40,7 +40,7 @@ export default async function handler(req: Request) {
   }
 
   const ai = new GoogleGenAI({ apiKey });
-  const MODEL_NAME = 'gemini-2.5-flash';
+  const MODEL_NAME = 'gemini-3-pro-preview';
 
   try {
     const { message, history, schedules } = await req.json() as ChatRequest;
