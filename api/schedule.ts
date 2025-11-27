@@ -2,7 +2,7 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { GoogleGenAI, Type, Schema } from "@google/genai";
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-const MODEL_NAME = 'gemini-3-pro-preview';
+const MODEL_NAME = 'gemini-2.5-flash';
 
 interface ProjectContext {
   id: string;
@@ -68,7 +68,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       config: {
         responseMimeType: "application/json",
         responseSchema: responseSchema,
-        temperature: 0.1
+        temperature: 0.1,
+        thinkingConfig: { thinkingBudget: 0 }
       }
     });
 

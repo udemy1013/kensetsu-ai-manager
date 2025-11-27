@@ -32,7 +32,7 @@ Vercelダッシュボードで`GEMINI_API_KEY`環境変数を設定してくだ�
 - React 19 + TypeScript
 - Vite 6（バンドラー）
 - Vercel Serverless Functions（APIルート）
-- Google Gemini AI（`gemini-3-pro-preview`モデル）
+- Google Gemini AI（`gemini-2.5-flash`モデル）
 - Tailwind CSS（index.htmlでCDN経由）
 - lucide-react（アイコン）
 

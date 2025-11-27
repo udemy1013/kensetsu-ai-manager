@@ -40,7 +40,7 @@ export default async function handler(req: Request) {
   }
 
   const ai = new GoogleGenAI({ apiKey });
-  const MODEL_NAME = 'gemini-3-pro-preview';
+  const MODEL_NAME = 'gemini-2.5-flash';
 
   try {
     const { message, history, schedules } = await req.json() as ChatRequest;
@@ -131,7 +131,8 @@ ${scheduleText || '(まだスケジュールがありません)'}
               { role: 'user', parts: [{ text: message }] }
             ],
             config: {
-              temperature: 0.7
+              temperature: 0.7,
+              thinkingConfig: { thinkingBudget: 0 }
             }
           });
 

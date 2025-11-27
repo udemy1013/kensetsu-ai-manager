@@ -39,7 +39,7 @@ export default async function handler(req: Request) {
   }
 
   const ai = new GoogleGenAI({ apiKey });
-  const MODEL_NAME = 'gemini-3-pro-preview';
+  const MODEL_NAME = 'gemini-2.5-flash';
 
   try {
     const { projects, targetMonth, customRules } = await req.json() as ScheduleRequest;
@@ -98,7 +98,8 @@ export default async function handler(req: Request) {
             model: MODEL_NAME,
             contents: prompt,
             config: {
-              temperature: 0.1
+              temperature: 0.1,
+              thinkingConfig: { thinkingBudget: 0 }
             }
           });
 
